@@ -15,4 +15,103 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#health-a
+                <li><a href="#health-assessment">Health Assessment</a></li>
+                <li><a href="#chatbot">Chatbot</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h2>Provide the Best Care for Your Plants!</h2>
+
+    <!-- Plant Health Assessment Section -->
+    <div id="health-assessment">
+        <h2>Plant Health Assessment</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <button id="assessButton">Assess Health</button>
+        <pre id="result"></pre>
+    </div>
+
+    <!-- Chatbot Section -->
+    <div id="chatbot" class="chatbot">
+        <h2>Chat with GroBot</h2>
+        <div id="chatWindow" class="chat-window">
+            <div id="chatMessages" class="chat-messages"></div>
+        </div>
+        <div>
+            <input type="text" id="userInput" placeholder="Type your message here..." class="user-input" />
+            <button id="sendButton" class="send-button">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Icon for Toggle Visibility -->
+    <div id="chatIcon" class="chat-icon">
+        <img src="https://github.com/paritheplatypus/growwiththeflow.design/blob/main/ChatbotIcon.png?raw=true" alt="Chatbot Icon" width="50" height="50">
+    </div>
+
+    <script>
+        // Chatbot Interaction
+        document.getElementById('sendButton').addEventListener('click', function() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === "") return;
+
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatMessages.innerHTML += `<div><strong>GroBot:</strong> ${data.response}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                chatMessages.innerHTML += `<div><strong>Error:</strong> ${error.message}</div>`;
+            });
+
+            // Clear the input
+            document.getElementById('userInput').value = '';
+        });
+
+        // Toggle chatbot visibility
+        document.getElementById('chatIcon').addEventListener('click', function() {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'block' : 'none';
+        });
+
+        // Plant Health Assessment
+        document.getElementById('assessButton').addEventListener('click', function() {
+            const imageInput = document.getElementById('imageInput');
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = "Assessing plant health..."; // Indicate loading state
+
+            if (imageInput.files.length === 0) {
+                alert("Please upload an image.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            formData.append('type', 'health');
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultElement.textContent = JSON.stringify(data.result, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultElement.textContent = `Error: ${error.message}`;
+            });
+        });
+    </script>
+</body>
+</html>
