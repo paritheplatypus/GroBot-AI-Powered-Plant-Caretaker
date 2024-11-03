@@ -16,18 +16,30 @@ header {
     background: #344a28; /* Darker green for header */
     color: #d1e7dd;
     padding-top: 10px;
-    min-height: 70px;
+    padding-bottom: 10px; /* Added padding for better height */
+    min-height: 100px; /* Increased minimum height for the header */
     border-bottom: #77ab59 3px solid; /* Soft green bottom border */
+    display: flex; /* Use flexbox for better alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.logo {
+    display: flex; /* Use flexbox for logo alignment */
+    align-items: center; /* Center logo vertically */
+}
+
+.logo img {
+    height: 80px; /* Set the height of the logo */
+    margin-right: 20px; /* Space between logo and title */
 }
 
 header h1 {
-    float: left;
     margin-top: 0;
 }
 
 nav {
-    float: right;
     margin-top: 10px;
+    margin-left: auto; /* Align nav to the right */
 }
 
 nav ul {
