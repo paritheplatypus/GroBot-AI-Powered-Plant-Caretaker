@@ -32,7 +32,7 @@
     <section id="home" class="hero">
         <div class="container">
             <h2>Provide Better Care for Your Plants</h2>
-            <p>Upload photos of your plants to get an accurate </p>
+            <p>Upload photos of your plants to get an accurate health assessment.</p>
             <a href="#signup" class="btn">Get Started</a>
         </div>
     </section>
@@ -53,6 +53,18 @@
                 <h3>Nutrition Information</h3>
                 <p>Set financial goals and track your progress towards achieving them.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Health Assessment Section -->
+    <section id="health-assessment" class="health-assessment">
+        <div class="container">
+            <h2>Plant Health Assessment</h2>
+            <form id="health-form">
+                <input type="file" id="plant-image" accept="image/*" required>
+                <button type="submit">Assess Health</button>
+            </form>
+            <div id="result"></div>
         </div>
     </section>
 
@@ -87,6 +99,42 @@
             </nav>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('health-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('plant-image');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function() {
+                const base64Image = reader.result;
+                assessPlantHealth(base64Image);
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function assessPlantHealth(base64Image) {
+            fetch('http://127.0.0.1:5000/health', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image: base64Image }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = 'Error assessing health.';
+            });
+        }
+    </script>
 </body>
 
 </html>
