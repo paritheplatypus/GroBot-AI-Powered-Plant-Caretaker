@@ -4,58 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plant Care Chatbot</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
     <script src="script.js" defer></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-        #chatbot {
-            display: none;
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: white;
-        }
-        #chatWindow {
-            border: 1px solid #ccc;
-            height: 300px;
-            overflow-y: scroll;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-        }
-        #chatMessages {
-            padding: 5px;
-        }
-        #userInput {
-            width: calc(100% - 100px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 5px;
-        }
-        #sendButton {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-        }
-        #sendButton:hover {
-            background-color: #218838;
-        }
-        #chatIcon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
     <h1>Welcome to the Plant Care Chatbot</h1>
@@ -67,19 +17,19 @@
         <pre id="result"></pre>
     </div>
 
-    <div id="chatbot">
+    <div id="chatbot" class="chatbot">
         <h2>Chat with GroBot</h2>
-        <div id="chatWindow">
-            <div id="chatMessages"></div>
+        <div id="chatWindow" class="chat-window">
+            <div id="chatMessages" class="chat-messages"></div>
         </div>
         <div>
-            <input type="text" id="userInput" placeholder="Type your message here..." />
-            <button id="sendButton">Send</button>
+            <input type="text" id="userInput" placeholder="Type your message here..." class="user-input" />
+            <button id="sendButton" class="send-button">Send</button>
         </div>
     </div>
 
-    <div id="chatIcon">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="50" height="50" style="border-radius: 50%; background-color: #28a745; padding: 10px;">
+    <div id="chatIcon" class="chat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="50" height="50">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c-4.5 0-8.25 3.5-8.25 8s3.75 8 8.25 8c1.5 0 3-.5 4.25-1.5l3 1.5-1.5-3c1-.75 1.5-2 1.5-3.5 0-4.5-3.75-8-8.25-8z" />
         </svg>
     </div>
