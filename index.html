@@ -10,76 +10,9 @@
 <body>
     <header>
         <div class="logo">
-            <img src="https://github.com/paritheplatypus/growwiththeflow.design/blob/main/Logo.png?raw=true" alt="Logo"> <!-- Add your logo image here -->
+            <img src="https://github.com/paritheplatypus/growwiththeflow.design/blob/main/Logo.png?raw=true" alt="Logo">
             <h1>GroBot</h1>
         </div>
         <nav>
             <ul>
-                <li><a href="#health-assessment">Health Assessment</a></li>
-                <li><a href="#chatbot">Chatbot</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <h2>Provide the Best Care for Your Plants!</h2>
-
-    <div id="health-assessment">
-        <h2>Plant Health Assessment</h2>
-        <input type="file" id="imageInput" accept="image/*">
-        <button id="assessButton">Assess Health</button>
-        <pre id="result"></pre>
-    </div>
-
-    <div id="chatbot" class="chatbot">
-        <h2>Chat with GroBot</h2>
-        <div id="chatWindow" class="chat-window">
-            <div id="chatMessages" class="chat-messages"></div>
-        </div>
-        <div>
-            <input type="text" id="userInput" placeholder="Type your message here..." class="user-input" />
-            <button id="sendButton" class="send-button">Send</button>
-        </div>
-    </div>
-
-    <div id="chatIcon" class="chat-icon">
-        <svg xmlns="https://github.com/paritheplatypus/growwiththeflow.design/blob/main/ChatbotIcon.png?raw=true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="50" height="50">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c-4.5 0-8.25 3.5-8.25 8s3.75 8 8.25 8c1.5 0 3-.5 4.25-1.5l3 1.5-1.5-3c1-.75 1.5-2 1.5-3.5 0-4.5-3.75-8-8.25-8z" />
-        </svg>
-    </div>
-
-    <script>
-        document.getElementById('sendButton').addEventListener('click', function() {
-            const userInput = document.getElementById('userInput').value;
-            if (userInput.trim() === "") return;
-
-            const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
-
-            fetch('/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: userInput }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                chatMessages.innerHTML += `<div><strong>GroBot:</strong> ${data.response}</div>`;
-                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                chatMessages.innerHTML += `<div><strong>Error:</strong> ${error.message}</div>`;
-            });
-
-            // Clear the input
-            document.getElementById('userInput').value = '';
-        });
-
-        document.getElementById('chatIcon').addEventListener('click', function() {
-            const chatbot = document.getElementById('chatbot');
-            chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'block' : 'none';
-        });
-    </script>
-</body>
-</html>
+                <li><a href="#health-a
