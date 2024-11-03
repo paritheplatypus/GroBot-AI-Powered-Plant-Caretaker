@@ -21,7 +21,6 @@
     </nav>
 </header>
 
-
     <h2>Provide the Best Care for Your Plants!</h2>
 
     <!-- Plant Health Assessment Section -->
@@ -37,7 +36,7 @@
     <div id="chatbot" class="chatbot">
         <h2><br></vr>Chat with GroBot</h2>
         <p>Talk to GroBot and ask him any questions you might have! Here are a few prompts to help you get started:</p>
-        <p>1. How do I take care of my rose plant></p>
+        <p>1. How do I take care of my rose plant?</p>
         <p>2. What kind of plant should I buy?</p>
         <p>3. Which is the best temperature range for my money plant to grow?</p>
         <div id="chatWindow" class="chat-window">
@@ -94,10 +93,18 @@
         document.getElementById('assessButton').addEventListener('click', function() {
             const imageInput = document.getElementById('imageInput');
             const resultElement = document.getElementById('result');
-            resultElement.textContent = "Assessing plant health..."; // Indicate loading state
+            
+            // Clear previous results and indicate loading state
+            resultElement.textContent = "Assessing plant health..."; 
 
             if (imageInput.files.length === 0) {
                 alert("Please upload an image.");
+                return;
+            }
+
+            // Check for image file type
+            if (!imageInput.files[0].type.startsWith('image/')) {
+                alert("Please upload a valid image file.");
                 return;
             }
 
@@ -111,7 +118,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                resultElement.textContent = JSON.stringify(data.result, null, 2);
+                if (data.error) {
+                    resultElement.textContent = `Error: ${data.error}`; // Display error messages if present
+                } else {
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
