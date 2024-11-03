@@ -1,140 +1,85 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #051F20; /* Dark green background */
-    color: #d1e7dd; /* Light text color for contrast */
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Care Chatbot</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo"> <!-- Update with your logo image path -->
+            <h1>Welcome to the Plant Care Chatbot</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#health-assessment">Health Assessment</a></li>
+                <li><a href="#chatbot">Chatbot</a></li>
+            </ul>
+        </nav>
+    </header>
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
+    <div class="container">
+        <div id="health-assessment">
+            <h2>Plant Health Assessment</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <button id="assessButton">Assess Health</button>
+            <pre id="result"></pre>
+        </div>
 
-header {
-    background: #344a28; /* Darker green for header */
-    color: #d1e7dd;
-    padding-top: 10px;
-    padding-bottom: 10px; /* Added padding for better height */
-    min-height: 100px; /* Increased minimum height for the header */
-    border-bottom: #77ab59 3px solid; /* Soft green bottom border */
-    display: flex; /* Use flexbox for better alignment */
-    align-items: center; /* Center items vertically */
-}
+        <div id="chatbot" class="chatbot" style="display: none;">
+            <h2>Chat with GroBot</h2>
+            <div id="chatWindow" class="chat-window">
+                <div id="chatMessages" class="chat-messages"></div>
+            </div>
+            <div>
+                <input type="text" id="userInput" placeholder="Type your message here..." class="user-input" />
+                <button id="sendButton" class="send-button">Send</button>
+            </div>
+        </div>
 
-.logo {
-    display: flex; /* Use flexbox for logo alignment */
-    align-items: center; /* Center logo vertically */
-}
+        <div id="chatIcon" class="chat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="50" height="50">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c-4.5 0-8.25 3.5-8.25 8s3.75 8 8.25 8c1.5 0 3-.5 4.25-1.5l3 1.5-1.5-3c1-.75 1.5-2 1.5-3.5 0-4.5-3.75-8-8.25-8z" />
+            </svg>
+        </div>
+    </div>
 
-.logo img {
-    height: 80px; /* Set the height of the logo */
-    margin-right: 20px; /* Space between logo and title */
-}
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === "") return;
 
-header h1 {
-    margin-top: 0;
-}
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
 
-nav {
-    margin-top: 10px;
-    margin-left: auto; /* Align nav to the right */
-}
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatMessages.innerHTML += `<div><strong>GroBot:</strong> ${data.response}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                chatMessages.innerHTML += `<div><strong>Error:</strong> ${error.message}</div>`;
+            });
 
-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
+            // Clear the input
+            document.getElementById('userInput').value = '';
+        });
 
-nav ul li {
-    display: inline;
-    margin-left: 10px;
-}
-
-nav ul li a {
-    color: #d1e7dd;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
-    color: #a1c799; /* Light green on hover */
-}
-
-.hero {
-    background: url('hero-image.jpg') no-repeat center center/cover;
-    color: #d1e7dd; /* Light text for contrast */
-    height: 400px;
-    text-align: center;
-    padding-top: 100px;
-}
-
-.hero h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-.btn {
-    background: #77ab59; /* Soft green */
-    color: #1a3d2f; /* Dark green text */
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 18px;
-    border-radius: 5px;
-}
-
-.btn:hover {
-    background: #a1c799; /* Lighter green */
-    color: #1a3d2f;
-}
-
-.features, .about, .cta, footer {
-    padding: 30px 0;
-    text-align: center;
-}
-
-.features h2, .about h2, .cta h2 {
-    margin-bottom: 20px;
-    color: #77ab59; /* Soft green for section titles */
-}
-
-.features .feature-item, .about p, .cta p {
-    margin-bottom: 20px;
-}
-
-footer {
-    background: #0e2a1e; /* Dark green footer */
-    color: #d1e7dd;
-    padding: 20px 0;
-}
-
-footer p {
-    margin: 0;
-    padding-bottom: 10px;
-}
-
-footer nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-footer nav ul li {
-    display: inline;
-    margin-left: 10px;
-}
-
-footer nav ul li a {
-    color: #d1e7dd;
-    text-decoration: none;
-}
-
-footer nav ul li a:hover {
-    color: #a1c799; /* Light green on hover */
-}
+        document.getElementById('chatIcon').addEventListener('click', function() {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>
