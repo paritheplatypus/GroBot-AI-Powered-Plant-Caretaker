@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plant Care Chatbot</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link to your CSS file -->
 </head>
 <body>
     <h1>Welcome to the Plant Care Chatbot</h1>
@@ -13,11 +12,15 @@
     <div id="health-assessment">
         <h2>Plant Health Assessment</h2>
         <input type="file" id="imageInput" accept="image/*">
+        <select id="assessmentType">
+            <option value="identify">Identify Plant</option>
+            <option value="health">Assess Health</option>
+        </select>
         <button id="assessButton">Assess Health</button>
         <pre id="result"></pre>
     </div>
 
-    <div id="chatbot" class="chatbot">
+    <div id="chatbot" class="chatbot" style="display: none;">
         <h2>Chat with GroBot</h2>
         <div id="chatWindow" class="chat-window">
             <div id="chatMessages" class="chat-messages"></div>
@@ -66,6 +69,27 @@
         document.getElementById('chatIcon').addEventListener('click', function() {
             const chatbot = document.getElementById('chatbot');
             chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'block' : 'none';
+        });
+
+        document.getElementById('assessButton').addEventListener('click', function() {
+            const imageInput = document.getElementById('imageInput');
+            const assessmentType = document.getElementById('assessmentType').value;
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            formData.append('type', assessmentType);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data.result, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
