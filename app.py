@@ -3,7 +3,10 @@ import base64
 import requests
 import google.generativeai as ai
 
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # API Keys
 PLANT_API_KEY = 'DCvGCUOqBk0kSUmGMrJAKNDUQ95Uq5l1ajMbzFgVObOy8VXVEa'
@@ -82,7 +85,7 @@ def upload_image():
     else:
         result = {"error": "Invalid analysis type."}
 
-    return jsonify(result)
+    return jsonify(result)  # Return a complete JSON response
 
 if __name__ == '__main__':
     app.run(debug=True)
