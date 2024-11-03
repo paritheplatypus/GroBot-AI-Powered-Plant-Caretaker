@@ -1,83 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Powered Plant Disease Detection</title>
-    <link rel="stylesheet" href="static/styles.css">
+    <title>Plant Care Chatbot</title>
+    <script src="script.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        #chatbot {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+        #chatWindow {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+        #chatMessages {
+            padding: 5px;
+        }
+        #userInput {
+            width: calc(100% - 100px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        #sendButton {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        #sendButton:hover {
+            background-color: #218838;
+        }
+        #chatIcon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Header Section -->
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="https://github.com/paritheplatypus/growwiththeflow.design/blob/main/Logo.png?raw=true" alt="GroBot Logo">
-                <h1>GroBot</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="#signup" class="btn">Sign Up</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <h1>Welcome to the Plant Care Chatbot</h1>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <h2>Provide Better Care for Your Plants</h2>
-            <p>Upload photos of your plants to get an accurate health assessment.</p>
-            <form id="health-form">
-                <input type="file" id="plant-image" accept="image/*" required>
-                <button type="submit">Assess Health</button>
-            </form>
-            <div id="result"></div>
-        </div>
-    </section>
+    <div id="health-assessment">
+        <h2>Plant Health Assessment</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <button id="assessButton">Assess Health</button>
+        <pre id="result"></pre>
+    </div>
 
-    <!-- Additional sections like Features, About, CTA, and Footer can remain unchanged -->
+    <div id="chatbot">
+        <h2>Chat with GroBot</h2>
+        <div id="chatWindow">
+            <div id="chatMessages"></div>
+        </div>
+        <div>
+            <input type="text" id="userInput" placeholder="Type your message here..." />
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <div id="chatIcon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="50" height="50" style="border-radius: 50%; background-color: #28a745; padding: 10px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c-4.5 0-8.25 3.5-8.25 8s3.75 8 8.25 8c1.5 0 3-.5 4.25-1.5l3 1.5-1.5-3c1-.75 1.5-2 1.5-3.5 0-4.5-3.75-8-8.25-8z" />
+        </svg>
+    </div>
 
     <script>
-        document.getElementById('health-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('plant-image');
-            const file = fileInput.files[0];
-            const reader = new FileReader();
+        document.getElementById('sendButton').addEventListener('click', function() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === "") return;
 
-            reader.onloadend = function() {
-                const base64Image = reader.result;
-                assessPlantHealth(base64Image);
-            };
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
 
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function assessPlantHealth(base64Image) {
-            fetch('/health', {
+            fetch('/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ image: base64Image }),
+                body: JSON.stringify({ message: userInput }),
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+                chatMessages.innerHTML += `<div><strong>GroBot:</strong> ${data.response}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('result').innerHTML = 'Error assessing health.';
+                chatMessages.innerHTML += `<div><strong>Error:</strong> ${error.message}</div>`;
             });
-        }
+
+            // Clear the input
+            document.getElementById('userInput').value = '';
+        });
+
+        document.getElementById('chatIcon').addEventListener('click', function() {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'block' : 'none';
+        });
     </script>
 </body>
-
 </html>
