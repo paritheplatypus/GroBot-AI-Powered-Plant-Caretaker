@@ -1,1 +1,1 @@
-This folder contains the UI of GroBot.
+This folder contains the user interface of GroBot.
